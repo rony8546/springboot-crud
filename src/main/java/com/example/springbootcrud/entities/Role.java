@@ -3,15 +3,22 @@ package com.example.springbootcrud.entities;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "products")
-public class Product {
+@Table(name="roles")
+public class Role {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(unique = true)
     private String name;
-    private Integer price;
-    private String description;
+
+    public Role() {
+    }
+
+    public Role(String name) {
+        this.name = name;
+    }
 
     public Long getId() {
         return id;
@@ -27,21 +34,5 @@ public class Product {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Integer getPrice() {
-        return price;
-    }
-
-    public void setPrice(Integer price) {
-        this.price = price;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String descripcion) {
-        this.description = descripcion;
     }
 }

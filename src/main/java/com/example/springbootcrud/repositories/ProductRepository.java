@@ -1,4 +1,7 @@
 package com.example.springbootcrud.repositories;
 
-public interface ProductRepository {
+import com.example.springbootcrud.entities.Product;
+import org.springframework.data.repository.CrudRepository;
+
+public interface ProductRepository extends CrudRepository<Product, Long> {
 }
