@@ -1,10 +1,15 @@
 package com.example.springbootcrud.entities;
 
+
+import com.example.springbootcrud.validation.ExistsByUserName;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name="users")
@@ -14,14 +19,16 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
+    @ExistsByUserName
     @NotBlank
+    @Column(unique = true)
     private String username;
 
     @NotBlank
-    @Size(max = 255)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
+    @JsonIgnoreProperties({"users", "handler", "hibernateLazyInitializer"})
     @ManyToMany
     @JoinTable(
             name = "user_roles",
@@ -39,6 +46,7 @@ public class User {
     }
 
     @Transient
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private boolean admin;
 
     public boolean isAdmin() {
@@ -87,5 +95,18 @@ public class User {
 
     public void setEnable(boolean enable) {
         this.enable = enable;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id) && Objects.equals(username, user.username) && Objects.equals(roles, user.roles);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, username);
     }
 }
